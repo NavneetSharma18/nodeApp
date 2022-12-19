@@ -5,6 +5,19 @@
                         <h2>NODE.JS MVC</h2>  
                         <div class="card">
 
+                        <% if(typeof alert != 'undefined'){
+
+                           if (alert.forEach(function(error){ %>
+
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                  <strong><%= error.msg %></strong> 
+                                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                              
+                               <%  }))  %>
+
+                         <%    } %>
+
                       
                         <% if(typeof success != 'undefined'){
 
@@ -30,7 +43,7 @@
                                         <div class="cols-sm-10">
                                             <div class="input-group">
                                                 <span class="input-group-addon"><i class="fa fa-envelope fa" aria-hidden="true"></i></span>
-                                                <input type="text" class="form-control" name="email" id="email" placeholder="Enter your Email" />
+                                                <input type="text" class="form-control" name="username" id="username" placeholder="Enter your Email" />
                                             </div>
                                         </div>
                                     </div>

@@ -1,8 +1,15 @@
 const { check, validationResult } = require('express-validator');
 const bcrypt                      = require('bcrypt');
 const saltRounds                  = 10;
+const passport                    = require('passport');
+const LocalStrategy               = require('passport-local');
 const flash                       = require('connect-flash');
+
+// Load model
 const User                        = require('../models/user');
+
+
+
 
 
 /*-------------------------------------------------------
@@ -29,6 +36,18 @@ const loginView = (req, res) => {
 }
 
 
+/*---------------------------------------------------------
+| Validate User via login
+---------------------------------------------------------*/
+
+
+const validateUser = (req, res) =>{
+    
+    return res.redirect('/admin/dashboard');
+    
+}
+
+
 
 /*-------------------------------------------------------
 | Post register request 
@@ -52,36 +71,50 @@ const registerUser = (req, res) =>{
         }
         else {
 
-            const userReq       = req.body;
-            const insertUser    = new User(userReq);
-            insertUser.password = bcrypt.hashSync(userReq.password, saltRounds);
+                const userReq       = req.body;
+                const insertUser    = new User(userReq);
+                insertUser.password = bcrypt.hashSync(userReq.password, saltRounds);
 
-            insertUser.save().then(data => {
+                insertUser.save().then(data => {
 
-                 const success =[{
-                            "value": '',
-                            "msg"  : 'User register successfully !',
-                            "param": 'savingModel'
-                    }];
+                     const success =[{
+                                "value": '',
+                                "msg"  : 'User register successfully !',
+                                "param": 'savingModel'
+                        }];
 
-                    res.redirect('login');
+                        res.redirect('/');
 
-            }).catch( err =>{
+                }).catch( err =>{
 
-                    const alert =[{
-                            "value": '',
-                            "msg"  : err,
-                            "param": 'savingModel'
-                    }];
+                        const alert =[{
+                                "value": '',
+                                "msg"  : err,
+                                "param": 'savingModel'
+                        }];
 
-                    res.render('register',{
-                      alert
-                    });
-                
-            });
+                        res.render('register',{
+                          alert
+                        });
+                    
+                });
         }
    
 }
+
+
+/*------------------------------------------------------
+| Logout user
+-------------------------------------------------------*/
+
+const logoutUser = (req,res,next) =>{
+    req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+   });
+}
+
+
 
 
 /*-------------------------------------------------------
@@ -94,5 +127,7 @@ const registerUser = (req, res) =>{
 module.exports =  {
     registerView,
     loginView,
-    registerUser
+    registerUser,
+    validateUser,
+    logoutUser,
 };

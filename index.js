@@ -1,11 +1,14 @@
-const express    = require('express');
-const dotenv     = require('dotenv');
-const flash      = require('connect-flash');
-const mongoose   = require('mongoose');
+const express           = require('express');
+const dotenv            = require('dotenv');
+const flash             = require('connect-flash');
+const {isAuthenticated} = require('./auth/auth.js');
+const mongoose          = require('mongoose');
+
 mongoose.set("strictQuery", false);
 const app        = express();
 
 app.use(express.urlencoded({extended: false}));
+
 
 dotenv.config();
 
@@ -37,6 +40,6 @@ mongoose
 //use rotes
 
 app.use('/', require('./routes/login'));
-app.use('/admin', require('./routes/admin'));
+app.use('/admin',isAuthenticated, require('./routes/admin'));
 
 app.listen(PORT, console.log("Server don start for port: " + PORT))
