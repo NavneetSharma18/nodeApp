@@ -1,5 +1,12 @@
-
 const mongoose = require("mongoose");
+
+
+
+/*----------------------------------------------------------
+| Declare model schemas and Create model in mongo
+----------------------------------------------------------*/
+
+
 
 const userSchema = mongoose.Schema({
 
@@ -29,5 +36,9 @@ const userSchema = mongoose.Schema({
 
 
 const User = mongoose.model("User", userSchema);
+
+
+
+
 
 module.exports = User;

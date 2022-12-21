@@ -1,22 +1,23 @@
 const express                     = require('express');
+const flash                       = require('connect-flash');
 const { check, validationResult } = require('express-validator');
 const passport                    = require('passport');
-const LocalStrategy               = require('passport-local').Strategy;
 const session                     = require('express-session');
-const bcrypt                      = require('bcrypt');
 const saltRounds                  = 10;
 const router                      = express.Router();
 
 const {registerView, loginView, registerUser,validateUser,logoutUser} = require('../controllers/loginController');
-// Load model
 const User                        = require('../models/user');
 
 
 
 
-/*--------------------------------------------
-| Register functionality start from here
----------------------------------------------*/
+
+
+
+/*-----------------------------------------------------
+| ****** Login Register Routes Start from here ******
+-------------------------------------------------------*/
 
 
 router.get('/register', registerView);
@@ -40,6 +41,8 @@ router.post('/register',[
 ],registerUser);
 
 
+
+
 /*--------------------------------------------
 | Login functionality start from here
 ---------------------------------------------*/
@@ -47,73 +50,18 @@ router.post('/register',[
 router.get('/', loginView);
 
 
-// Configure Sessions Middleware
-
-router.use(session({
-  secret: 'r8q,+&1LM3)CD*zAGpx1xm{NeQhc;#',
-  resave: false,
-  saveUninitialized: true,
-  cookie: { maxAge: 60 * 60 * 1000 } // 1 hour
-}));
-
-
-
-/*------------------------------------------------
-| Passport Js Authentication local-strategy Start
--------------------------------------------------*/ 
-
-router.use(passport.initialize());
-router.use(passport.session());
-
-passport.use(new LocalStrategy(
-
-  function(username, password, done) {
-    
-    password = bcrypt.hashSync(password, saltRounds);
-    User.findOne({ email: username }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.password == password) { return done(null, false); }
-      return done(null, user);
-    });
-  }
-  
-));
-
-passport.serializeUser((user,done) =>{
-    // session store only user id so that rest ino of user is ignored due to wastage of memory
-    if(user){
-        return done(null,user.id)
-    }
-    return done(null,false)
-
+router.post("/login", (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/admin/dashboard',
+    failureRedirect: '/',
+    failureFlash: true
+  })(req, res, next);
 });
-
-passport.deserializeUser((id,done) =>{
-
-    User.findById(id,(err,user)=>{
-        if(err) return done(null,false);
-        return done(null,user)
-
-    })
-    
-})
-
-/*------------------------------------------------
-| Passport Js END
--------------------------------------------------*/ 
-
-
-router.post('/login', 
-  passport.authenticate('local'),
-  validateUser
-);
 
 router.post('/logout', 
   logoutUser
 );
 
-logoutUser
 
 
 module.exports = router;

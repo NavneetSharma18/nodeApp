@@ -4,6 +4,7 @@ const saltRounds                  = 10;
 const passport                    = require('passport');
 const LocalStrategy               = require('passport-local');
 const flash                       = require('connect-flash');
+const md5                         = require('md5');
 
 // Load model
 const User                        = require('../models/user');
@@ -41,12 +42,10 @@ const loginView = (req, res) => {
 ---------------------------------------------------------*/
 
 
-const validateUser = (req, res) =>{
-    
-    return res.redirect('/admin/dashboard');
-    
-}
+const validateUser =  (req, res) => {
 
+  res.redirect('/admin/dashboard'); 
+}
 
 
 /*-------------------------------------------------------
@@ -56,45 +55,34 @@ const validateUser = (req, res) =>{
 
 const registerUser = (req, res) =>{
 
-    
-        const errors = validationResult(req);
-     
-        if (!errors.isEmpty()) {    
+        
+        const validError  = validationResult(req);
+        const errors      = validError.array();
 
-            const alert = errors.array();
-
-            console.log(alert);
-
+        
+        if (errors.length > 0) {    
+            console.log(errors);
             res.render('register',{
-                alert
+                errors
             });
         }
         else {
-
+                const errors        = [];
                 const userReq       = req.body;
                 const insertUser    = new User(userReq);
-                insertUser.password = bcrypt.hashSync(userReq.password, saltRounds);
+                insertUser.password = md5(md5('dj@123'));
 
                 insertUser.save().then(data => {
 
-                     const success =[{
-                                "value": '',
-                                "msg"  : 'User register successfully !',
-                                "param": 'savingModel'
-                        }];
-
-                        res.redirect('/');
+                  req.flash('success_msg','You are now registered and can log in');
+                  res.redirect('register');
 
                 }).catch( err =>{
-
-                        const alert =[{
-                                "value": '',
-                                "msg"  : err,
-                                "param": 'savingModel'
-                        }];
+                        console.log(err)
+                        errors.push(err);
 
                         res.render('register',{
-                          alert
+                          errors
                         });
                     
                 });
