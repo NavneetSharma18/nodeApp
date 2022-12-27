@@ -70,22 +70,41 @@ const registerUser = (req, res) =>{
                 const errors        = [];
                 const userReq       = req.body;
                 const insertUser    = new User(userReq);
-                insertUser.password = md5(md5('dj@123'));
+                insertUser.password = md5(md5(userReq.password));
 
-                insertUser.save().then(data => {
+                User.findOne({email:userReq.email}, function (err, user) {
 
-                  req.flash('success_msg','You are now registered and can log in');
-                  res.redirect('register');
+                    if (err){
+                        req.flash('error_msg',err);
+                        res.redirect('register');
 
-                }).catch( err =>{
-                        console.log(err)
-                        errors.push(err);
+                    }
 
-                        res.render('register',{
-                          errors
-                        });
-                    
+                    if(user){
+                        req.flash('error_msg','User already exist with this email try with another email');
+                        res.redirect('register');
+
+                    }else{
+
+                            insertUser.save().then(data => {
+
+                              req.flash('success_msg','You are now registered and can log in');
+                              res.redirect('register');
+
+                            }).catch( err =>{
+                                    console.log(err)
+                                    errors.push(err);
+
+                                    res.render('register',{
+                                      errors
+                                    });
+                                
+                            });
+
+                    }
                 });
+
+               
         }
    
 }

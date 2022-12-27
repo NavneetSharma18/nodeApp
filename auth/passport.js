@@ -11,7 +11,7 @@ module.exports = function(passport) {
 
       function(username, password, done) {
 
-        if(!username || !password){ return done(null, false, {message: "username and password can't be blank" }); }
+        if(!username || !password){  return done(null, false, {message: "username and password can't be blank" }); }
         
          User.findOne({ email: username }, function (err, user) {
 
