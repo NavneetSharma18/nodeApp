@@ -5,11 +5,9 @@ const passport                    = require('passport');
 const session                     = require('express-session');
 const saltRounds                  = 10;
 const router                      = express.Router();
-
-const {registerView, loginView, registerUser,validateUser,logoutUser} = require('../controllers/loginController');
 const User                        = require('../models/user');
 
-
+const {registerView, loginView, registerUser,validateUser,logoutUser} = require('../controllers/loginController');
 
 
 

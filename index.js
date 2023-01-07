@@ -4,10 +4,15 @@ const flash             = require('connect-flash');
 const {isAuthenticated} = require('./auth/auth.js');
 const mongoose          = require('mongoose');
 const passport          = require('passport');
+const { check, validationResult } = require('express-validator');
 const session           = require('express-session');
 const bcrypt            = require('bcrypt');
 const app               = express();
+
+
 require('./auth/passport')(passport);
+
+
 
 
 
