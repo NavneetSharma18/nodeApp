@@ -13,11 +13,6 @@ const app               = express();
 require('./auth/passport')(passport);
 
 
-
-
-
-
-
 mongoose.set("strictQuery", false);
 app.use(express.urlencoded({extended: false}));
 
@@ -100,11 +95,17 @@ mongoose
 
 
 /*----------------------------------------------------------
-| Setting the Routes based on user and admin authentication
+|||||--------=> Setting the Routes <=------------------|||||||||
 -----------------------------------------------------------*/
 
 app.use('/', require('./routes/login'));
 app.use('/admin',isAuthenticated, require('./routes/admin'));
+
+
+
+/*----------------------------------------------------------
+| App listen
+-----------------------------------------------------------*/
 
 app.listen(PORT).on('error', function (err) {
         if(err.errno === 'EADDRINUSE') {

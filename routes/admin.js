@@ -7,21 +7,6 @@ const router                                 = express.Router();
 
 
 
-router.use(flash());
-
-
-/*--------------------------------------------
-| Setting of global error message 
----------------------------------------------*/
-
-router.use(function(req, res, next) {
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg   = req.flash('error_msg');
-  res.locals.error       = req.flash('error');
-  next();
-});
-
-
 /*--------------------------------------------
 | Admin dashboard routes
 ---------------------------------------------*/
@@ -34,9 +19,7 @@ router.use(fileUpload({
 }));
 
 router.get('/upload', uploadView);
-router.post('/upload',[
-    check('uploadfile', 'Please select file')
-], uploadPost);
+router.post('/upload', uploadPost);
 
 
 module.exports = router;

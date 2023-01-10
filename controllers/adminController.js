@@ -1,4 +1,5 @@
 const {PROJECT_DIR}               = require('../setting.js');
+const flash                       = require('connect-flash');
 
 
 /*--------------------------------------------
@@ -18,10 +19,9 @@ const dashboardView = (req, res) => {
 ---------------------------------------------*/
 
 const uploadView = (req, res) => {
+
     const user = req.user;
-    res.render("upload_image", {
-    	user    
-    } );
+    res.render("upload_image",{user,req});
 }
 
 /*--------------------------------------------
@@ -29,18 +29,17 @@ const uploadView = (req, res) => {
 ---------------------------------------------*/
 
 const uploadPost = (req, res) => {
-     
          
 	     if (!req.files){
-	     	    console.log('file empty');
-	            req.flash('error_msg','Please select file');
+	     	    
+	     		req.flash('error_msg','Please select file');
 	            res.redirect('/admin/upload');
 
 	      }else if(req.files.uploadfile.mimetype != 'image/jpeg'){
 
-	      	    console.log('file type invalid');
 	      	    req.flash('error_msg','Only jpeg file allowed');
 	            res.redirect('/admin/upload');
+
 	      }else{
 
 	      	     sampleFile = req.files.uploadfile;

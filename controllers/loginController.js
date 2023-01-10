@@ -32,8 +32,7 @@ const registerView = (req, res) => {
 
 const loginView = (req, res) => {
 
-    res.render("login", {
-    } );
+    res.render("login", {req} );
 }
 
 
