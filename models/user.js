@@ -26,12 +26,13 @@ const userSchema = mongoose.Schema({
     required: [true, "Name can't be blank"],
   },
  
-  roles: [
+  role_id: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Role"
       }
     ]
+
 });
 
 

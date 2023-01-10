@@ -4,7 +4,8 @@
   "description": "this is basic app to learn view model controller",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "DB:SEED": "nodemon seed.js"
   },
   "author": "Navneet",
   "license": "ISC",
